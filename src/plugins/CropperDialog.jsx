@@ -17,6 +17,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -92,6 +93,7 @@ export default function CropperDialog({
   const [quality, setQuality] = useState(defaultQuality);
   const [format, setFormat] = useState('jpg');
   const [copied, setCopied] = useState(false);
+  const copiedTimer = useRef(null);
 
   const [sourceImg, setSourceImg] = useState(null);
   const [sourceState, setSourceState] = useState('idle'); // idle, loading, ready, error
@@ -106,6 +108,8 @@ export default function CropperDialog({
       setCopied(false);
     }
   }, [open, defaultQuality]);
+
+  useEffect(() => () => clearTimeout(copiedTimer.current), []);
 
   // Load the source image once per dialog session.
   useEffect(() => {
@@ -181,7 +185,8 @@ export default function CropperDialog({
     }
     if (ok) {
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      clearTimeout(copiedTimer.current);
+      copiedTimer.current = setTimeout(() => setCopied(false), 5000);
     }
   };
 
@@ -211,23 +216,29 @@ export default function CropperDialog({
             />
             <IconButton
               onClick={handleCopy}
-              aria-label={t('imageCropper_copy')}
+              aria-label={copied ? t('imageCropper_copied') : t('imageCropper_copy')}
               title={copied ? t('imageCropper_copied') : t('imageCropper_copy')}
+              color={copied ? 'success' : 'default'}
               disabled={!url}
             >
-              <ContentCopyIcon />
+              {copied ? <CheckIcon /> : <ContentCopyIcon />}
             </IconButton>
           </Box>
-          {copied && (
-            <Typography
-              variant="caption"
-              role="status"
-              aria-live="polite"
-              sx={{ display: 'block', mt: 0.5, color: 'success.main' }}
-            >
-              {t('imageCropper_copied')}
-            </Typography>
-          )}
+          <Box
+            component="span"
+            role="status"
+            aria-live="polite"
+            sx={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              overflow: 'hidden',
+              clip: 'rect(0 0 0 0)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {copied ? t('imageCropper_copied') : ''}
+          </Box>
         </Box>
         <Box
           sx={{
