@@ -1,7 +1,7 @@
 {
   "name": "mirador-image-cropper",
-  "version": "3.0.0",
-  "description": "Mirador 4 plugin: select an image region and build a IIIF Image API URL (port of @dbmdz/mirador-imagecropper 2.4.6)",
+  "version": "4.0.1",
+  "description": "Mirador 4 plugin: select an image region and build a IIIF Image API url",
   "main": "src/index.js",
   "module": "src/index.js",
   "type": "module",
@@ -23,7 +23,11 @@
     "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0"
   },
   "license": "MIT",
-  "repository": "https://github.com/dbmdz/mirador-plugins",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/Sempia/mirador-image-cropper.git"
+  },
+  "homepage": "https://gitlab.com/Sempia/mirador-image-cropper",
   "keywords": [
     "mirador-plugin",
     "mirador",
